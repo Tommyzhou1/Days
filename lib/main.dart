@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:circular_menu/circular_menu.dart';
 
@@ -93,81 +94,123 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String _colorName = 'No';
   Color _color = Colors.black;
+  int _days = 0;
+  DateTime selectedDate = DateTime.now();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        // ignore: non_constant_identifier_names
+        var DateNow = new DateTime.now();
+        var diff = DateNow.difference(picked).inDays;
+        _days = diff;
+      });
+  }
+  // ignore: non_constant_identifier_names
+
   @override
   Widget build(BuildContext context){
-    return Scaffold(
+    return new Scaffold(
       appBar: AppBar(
         titleSpacing: 0.0,
         title: const Text('Days'),
       ),
-      body: Container(
+      body: new Container(
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("images/background1.png"),
             fit: BoxFit.cover,
-            colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.dstATop),
+            colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.dstATop),          
           ),
         ),
-        child: CircularMenu(
-          alignment: Alignment.bottomRight,
-          backgroundWidget: Center(
-            child: RichText(
-              text: TextSpan(
-                style: TextStyle(color: Colors.black, fontSize: 28),
+        child:Stack(
+          children: [
+            new Container(
+              alignment: Alignment.topCenter,
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text("$_days days",style: TextStyle(fontSize: 32.0,fontWeight: FontWeight.bold)),
+                  SizedBox(height: 30.0,),
+                  RaisedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('Select date',style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold)),
+                    color: generateMaterialColor(Palette.primary),
+                  ),
+                ],
               ),
             ),
-          ),
-          toggleButtonColor: generateMaterialColor(PinkyPig.primary),
-          items: [
-            CircularMenuItem(
-                icon: Icons.home,
-                color: Colors.green,
-                onTap: () {
-                  setState(() {
-                    _color = Colors.green;
-                    _colorName = 'Green';
-                  });
-                }),
-            CircularMenuItem(
-                icon: Icons.search,
-                color: Colors.blue,
-                onTap: () {
-                  setState(() {
-                    _color = Colors.blue;
-                    _colorName = 'Blue';
-                  });
-                }),
-            CircularMenuItem(
-                icon: Icons.access_alarm_outlined,
-                color: Colors.orange,
-                onTap: () {
-                  setState(() {
-                    _color = Colors.orange;
-                    _colorName = 'Orange';
-                  });
-                }),
-            CircularMenuItem(
-                icon: Icons.chat,
-                color: Colors.purple,
-                onTap: () {
-                  setState(() {
-                    _color = Colors.purple;
-                    _colorName = 'Purple';
-                  });
-                }),
-            CircularMenuItem(
-                icon: Icons.notifications,
-                color: Colors.brown,
-                onTap: () {
-                  setState(() {
-                    _color = Colors.brown;
-                    _colorName = 'Brown';
-                  });
-                })
+            new Container(
+              child:CircularMenu(
+              alignment: Alignment.bottomRight,
+              backgroundWidget: Center(
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.black, fontSize: 28),
+                  ),
+                ),
+              ),
+              toggleButtonColor: generateMaterialColor(PinkyPig.primary),
+              items: [
+                CircularMenuItem(
+                    icon: Icons.home,
+                    color: Colors.green,
+                    onTap: () {
+                      setState(() {
+                        _color = Colors.green;
+                        _colorName = 'Green';
+                      });
+                    }),
+                CircularMenuItem(
+                    icon: Icons.search,
+                    color: Colors.blue,
+                    onTap: () {
+                      setState(() {
+                        _color = Colors.blue;
+                        _colorName = 'Blue';
+                      });
+                    }),
+                CircularMenuItem(
+                    icon: Icons.access_alarm_outlined,
+                    color: Colors.orange,
+                    onTap: () {
+                      setState(() {
+                        _color = Colors.orange;
+                        _colorName = 'Orange';
+                      });
+                    }),
+                CircularMenuItem(
+                    icon: Icons.chat,
+                    color: Colors.purple,
+                    onTap: () {
+                      setState(() {
+                        _color = Colors.purple;
+                        _colorName = 'Purple';
+                      });
+                    }),
+                CircularMenuItem(
+                    icon: Icons.notifications,
+                    color: Colors.brown,
+                    onTap: () {
+                      setState(() {
+                        _color = Colors.brown;
+                        _colorName = 'Brown';
+                      });
+                    })
+                ],
+              ),
+            ),
           ],
         ),
-      )
+      ),
     );
   }
 }
