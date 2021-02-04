@@ -96,6 +96,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Color _color = Colors.black;
   int _days = 0;
   DateTime selectedDate = DateTime.now();
+  Row rw = Row(children: <Widget>[
+      Icon(Icons.stairs_rounded),
+    ]
+  );
+  
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -130,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
             colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.6), BlendMode.dstATop),          
           ),
         ),
-        child:Stack(
+        child:Stack( 
           children: [
             new Container(
               alignment: Alignment.topCenter,
@@ -138,10 +143,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  rw,
                   Text("$_days days",style: TextStyle(fontSize: 32.0,fontWeight: FontWeight.bold)),
                   SizedBox(height: 30.0,),
                   RaisedButton(
-                    onPressed: () => _selectDate(context),
+                    onPressed: () {
+                      rw = Row(children: <Widget>[
+                          Icon(Icons.stairs_rounded),
+                          ]
+                        );
+                      // ignore: unnecessary_statements
+                      //_selectDate(context);
+                      setState(() {
+                        
+                      });
+                    } ,
                     child: Text('Select date',style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold)),
                     color: generateMaterialColor(Palette.primary),
                   ),
